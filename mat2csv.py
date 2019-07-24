@@ -20,17 +20,16 @@ if __name__ == '__main__':
 		for i in data:
 			if '__' not in i and 'readme' not in i:
 				np.savetxt((str(args.out)+'/'+i+".csv"),data[i],fmt='%s',delimiter=',')
-				print("Finished")
+		print("Finished converting {}".format(args.file))
 	elif args.directory:
-		print('first')
 		os.chdir(args.directory)
 		for file in glob.glob("*.mat"):
 			dir = args.directory
-			temp = (dir+"/"+file)
-			data = scipy.io.loadmat(temp)
+			temp = (os.path.join(dir,file))
+			data = scipy.io.loadmat('/Users/willhord/Documents/Github/Mat2csv/'+temp)
 			for i in data:
 				if '__' not in i and 'readme' not in i:
-					np.savetxt((str(args.out)+'/'+i+".csv"),data[i],fmt='%s', delimiter=',')
-					print("Finished")
+					np.savetxt(str(os.path.join(args.out, file+'_'+i+".csv")), data[i], fmt='%s', delimiter=',')
+			print("Finished converting {}".format(file))
 	else:
-		print("Try again")
+		print("Try again \nUse -h to show the help menu")
