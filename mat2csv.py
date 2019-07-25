@@ -10,16 +10,22 @@ parser.add_argument('-o', '--out', metavar='', type=str, help='Choose output dir
 
 args = parser.parse_args()
 if args.out:
-	args.out
+	if os.path.exists(args.out) == False:
+		os.makedirs(args.out)
+		args.out
+	else:
+		args.out
 else:
 	args.out = '.'
+
+initdir = os.path.dirname(os.path.realpath(__file__))
 
 if __name__ == '__main__':
 	if args.file:
 		data = scipy.io.loadmat(args.file)
 		for i in data:
 			if '__' not in i and 'readme' not in i:
-				np.savetxt((str(args.out)+'/'+i+".csv"),data[i],fmt='%s',delimiter=',')
+				np.savetxt((args.out+'/'+i+".csv"),data[i],fmt='%s',delimiter=',')
 		print("Finished converting {}".format(args.file))
 	elif args.directory:
 		os.chdir(args.directory)
@@ -29,7 +35,7 @@ if __name__ == '__main__':
 			data = scipy.io.loadmat('/Users/willhord/Documents/Github/Mat2csv/'+temp)
 			for i in data:
 				if '__' not in i and 'readme' not in i:
-					np.savetxt(str(os.path.join(args.out, file+'_'+i+".csv")), data[i], fmt='%s', delimiter=',')
+					np.savetxt(os.path.join(initdir, args.out, file+'_'+i+".csv"), data[i], fmt='%s', delimiter=',')
 			print("Finished converting {}".format(file))
 	else:
 		print("Try again \nUse -h to show the help menu")
